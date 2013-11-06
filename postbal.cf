@@ -1,0 +1,16 @@
+# Postfix configuration file for outbound transport load balancing.
+# It defines the list of Postfix transports to be used by Postbal.
+#
+# TRANSPORTS
+# The list of outbound transports used for load balancing is defined
+# in this file, with one transport per line.
+#
+# LINE FORMAT
+# {weight}transport:nexthop
+#
+# See the following links for more information:
+#   http://www.postfix.org/transport.5.html
+#   http://www.postfix.org/tcp_table.5.html
+#
+{1}smtp0:
+{1}smtp1:
