@@ -6,7 +6,7 @@ multiple IP addresses.
 
 
 
-## Dependencies
+## Prerequisites
 
 Before installing Postbal, you will need to install the following
 dependencies:
@@ -15,7 +15,7 @@ dependencies:
 
     Make sure it is built with tcp tables support:
 
-    ```bash
+    ```
     $ postconf -m
     btree
     cidr
@@ -29,20 +29,17 @@ dependencies:
     proxy
     regexp
     static
-    tcp
+    tcp      <-- Make sure this is present.
     texthash
     unix
     ```
 
 2. The List::util::WeightedRoundRobin Perl Module
 
-    ```bash
-    $ cpan install /List::util::WeightedRoundRobin/
     ```
-
-    > Note: you may have to upgrade to CPAN 2.0 to install this module.
-
-
+    $ cpan 
+    cpan[1]> install List::util::WeightedRoundRobin
+    ```
 
 ## Installation
 
@@ -116,6 +113,28 @@ allow Postfix to utilize the load balancer.
 transport_maps = tcp:127.0.0.1:23000
 127.0.0.1:23000_time_limit = 3600s
 ```
+
+Optionally, you may wish to tweak concurrency settings and delivery rates
+so that you get good performance, and reduce the risk of being flagged as
+a spammer. Here are some sample settings to get you started:
+
+```
+# CONCURRENCY SETTINGS AND DELIVERY RATES
+# (tweaked for Postbal)
+# 
+# Instead of sending many emails at once through a single 
+# transport, use many transports, but only send a few
+# through each one. This increases the amount of mail 
+# that can be delivered to a single domain without risk 
+# of being blacklisted.
+#
+default_process_limit = 200
+initial_destination_concurrency = 1
+default_destination_concurrency_limit = 4
+default_destination_rate_delay = 1s
+default_destination_recipient_limit = 2
+```
+
 
 
 ## Other Files
